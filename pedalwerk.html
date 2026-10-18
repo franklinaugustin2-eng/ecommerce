@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Pedalwerk – Gear for everyday riders</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,800&family=Instrument+Sans:wght@400;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E8EDF2;--surface:#fff;--ink:#14213D;--muted:#5B6980;--line:#CBD4DF;--accent:#E8490F;--accent-ink:#fff;
+--hf:"Bricolage Grotesque","Helvetica Neue",Arial,sans-serif;--bf:"Instrument Sans","Helvetica Neue",Arial,sans-serif;
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0F1726;--surface:#18233A;--ink:#EAF0F8;--muted:#9AA8BF;--line:#2B3A57;--accent:#FF6A33;--accent-ink:#14213D;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0F1726;--surface:#18233A;--ink:#EAF0F8;--muted:#9AA8BF;--line:#2B3A57;--accent:#FF6A33;--accent-ink:#14213D;color-scheme:dark}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.5 var(--bf)}
+button,input,select{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+header{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+.bar{display:flex;align-items:center;gap:16px;height:64px}
+.logo{font:800 24px var(--hf);letter-spacing:-.03em}
+.search{flex:1;max-width:420px;margin-left:auto}
+.search input{width:100%;height:40px;padding:0 14px;border:1px solid var(--line);border-radius:20px;background:var(--surface)}
+.cartbtn{height:40px;padding:0 16px;border:0;border-radius:20px;background:var(--ink);color:var(--bg);font-weight:600;display:flex;gap:8px;align-items:center}
+.cartbtn b{background:var(--accent);color:var(--accent-ink);border-radius:10px;min-width:22px;padding:0 6px;font-size:13px;line-height:22px}
+.hero{padding:56px 0 36px;display:grid;grid-template-columns:1.2fr 1fr;gap:32px;align-items:center}
+.hero h1{font:800 clamp(40px,7vw,84px)/.95 var(--hf);letter-spacing:-.04em;margin:0 0 18px}
+.hero p{max-width:46ch;color:var(--muted);font-size:18px;margin:0 0 24px}
+.btn{display:inline-block;border:0;border-radius:24px;padding:12px 24px;background:var(--accent);color:var(--accent-ink);font-weight:600}
+.btn.alt{background:transparent;border:1.5px solid var(--ink);color:var(--ink)}
+.beam{aspect-ratio:1;border-radius:50%;background:radial-gradient(circle at 50% 50%,var(--accent) 0 18%,transparent 18.5%),repeating-radial-gradient(circle at 50% 50%,transparent 0 22px,var(--line) 22px 24px);display:grid;place-items:center;max-width:340px;justify-self:center;width:100%}
+.beam span{font:800 20px var(--hf);color:var(--accent-ink);text-align:center;line-height:1.1}
+.tools{display:flex;flex-wrap:wrap;gap:10px;align-items:center;padding:12px 0 20px}
+.chip{border:1.5px solid var(--line);background:var(--surface);border-radius:20px;padding:6px 16px;font-weight:600}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.tools select{margin-left:auto;height:38px;padding:0 10px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:20px;padding-bottom:64px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:flex;flex-direction:column}
+.tile{aspect-ratio:4/3;display:grid;place-items:center;border:0;width:100%;color:#14213D}
+.tile svg{width:46%;height:auto}
+.info{padding:14px 16px 16px;display:flex;flex-direction:column;gap:4px;flex:1}
+.info h3{font:800 18px var(--hf);margin:0;letter-spacing:-.01em}
+.info small{color:var(--muted)}
+.row{display:flex;align-items:center;justify-content:space-between;margin-top:auto;padding-top:10px}
+.price{font:800 20px var(--hf)}
+.add{border:1.5px solid var(--ink);background:transparent;border-radius:18px;padding:6px 14px;font-weight:600}
+.add:hover{background:var(--ink);color:var(--bg)}
+.empty{grid-column:1/-1;text-align:center;color:var(--muted);padding:48px 0}
+.scrim{position:fixed;inset:0;background:rgba(10,16,30,.55);opacity:0;pointer-events:none;transition:opacity .2s;z-index:30}
+.scrim.on{opacity:1;pointer-events:auto}
+aside{position:fixed;top:0;right:0;bottom:0;width:min(400px,100%);background:var(--surface);z-index:40;transform:translateX(100%);transition:transform .25s;display:flex;flex-direction:column;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+aside.on{transform:none}
+.ah{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid var(--line)}
+.ah h2{font:800 22px var(--hf);margin:0}
+.x{border:0;background:transparent;font-size:26px;line-height:1;padding:4px 8px}
+.items{flex:1;overflow:auto;padding:8px 20px}
+.ship{padding:12px 20px;border-bottom:1px solid var(--line);font-size:14px}
+.meter{height:6px;background:var(--line);border-radius:3px;margin-top:6px;overflow:hidden}
+.meter i{display:block;height:100%;background:var(--accent);transition:width .3s}
+.li{display:grid;grid-template-columns:56px 1fr auto;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.li .t{width:56px;height:56px;border-radius:10px;display:grid;place-items:center;color:#14213D}
+.li .t svg{width:60%}
+.li strong{display:block;line-height:1.2}
+.qty{display:inline-flex;align-items:center;gap:8px;margin-top:4px}
+.qty button{width:26px;height:26px;border-radius:50%;border:1.5px solid var(--line);background:transparent}
+.foot{padding:16px 20px;border-top:1px solid var(--line)}
+.sub{display:flex;justify-content:space-between;font:800 20px var(--hf);margin-bottom:12px}
+.foot .btn{width:100%;text-align:center}
+.modal{position:fixed;inset:0;z-index:50;display:none;place-items:center;padding:20px}
+.modal.on{display:grid}
+.box{background:var(--surface);border-radius:16px;max-width:760px;width:100%;display:grid;grid-template-columns:1fr 1fr;overflow:hidden;max-height:90vh;overflow-y:auto}
+.box .tile{height:100%;aspect-ratio:auto;min-height:240px}
+.det{padding:24px;display:flex;flex-direction:column;gap:10px;position:relative}
+.det h2{font:800 28px/1.05 var(--hf);margin:0;letter-spacing:-.02em}
+.det p{color:var(--muted);margin:0}
+.det .x{position:absolute;top:8px;right:8px}
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom,0px));transform:translate(-50%,120px);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:20px;z-index:60;transition:transform .25s;font-weight:600}
+.toast.on{transform:translate(-50%,0)}
+footer{border-top:1px solid var(--line);padding:28px 0;color:var(--muted);font-size:14px}
+@media(max-width:720px){.hero{grid-template-columns:1fr;padding-top:32px}.beam{max-width:200px}.box{grid-template-columns:1fr}.box .tile{min-height:180px}.search{max-width:none}.logo{font-size:20px}.cartbtn span{display:none}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<header><div class="wrap bar">
+<div class="logo">Pedalwerk</div>
+<div class="search"><input id="q" type="search" placeholder="Search lights, bags, locks" aria-label="Search products"></div>
+<button class="cartbtn" id="open" aria-label="Open cart"><span>Cart</span><b id="count">0</b></button>
+</div></header>
+
+<main class="wrap">
+<section class="hero">
+<div>
+<h1>Ride home in the dark. Be seen.</h1>
+<p>Lights, locks and luggage for people who bike to work, not for sport. Free shipping over $75.</p>
+<a class="btn" href="#shop">Shop all gear</a>
+</div>
+<div class="beam" aria-hidden="true"><span>600<br>lumens</span></div>
+</section>
+
+<section id="shop">
+<div class="tools" id="chips" role="group" aria-label="Filter by category"></div>
+<div class="tools" style="padding-top:0;margin-top:-12px"><select id="sort" aria-label="Sort products">
+<option value="feat">Featured</option><option value="lo">Price: low to high</option><option value="hi">Price: high to low</option><option value="az">Name A–Z</option></select></div>
+<div class="grid" id="grid"></div>
+</section>
+</main>
+<footer><div class="wrap">© 2026 Pedalwerk. Demo storefront – no real orders are placed.</div></footer>
+
+<div class="scrim" id="scrim"></div>
+<aside id="cart" aria-label="Shopping cart" aria-hidden="true">
+<div class="ah"><h2>Your cart</h2><button class="x" id="close" aria-label="Close cart">×</button></div>
+<div class="ship" id="ship"></div>
+<div class="items" id="items"></div>
+<div class="foot"><div class="sub"><span>Subtotal</span><span id="sub">$0</span></div><button class="btn" id="buy">Check out</button></div>
+</aside>
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-label="Product details"><div class="box" id="box"></div></div>
+<div class="toast" id="toast" role="status"></div>
+
+<script>
+const G={
+light:'<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="14" y="36" width="44" height="28" rx="8"/><path d="M66 42l22-10M66 50h24M66 58l22 10"/></svg>',
+bag:'<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 38h56l6 44H16z"/><path d="M36 38V26a14 14 0 0128 0v12"/></svg>',
+helmet:'<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><path d="M14 66a36 36 0 0172 0z"/><path d="M38 66V36M62 66V36M14 76h72"/></svg>',
+lock:'<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="24" y="44" width="52" height="38" rx="8"/><path d="M36 44V32a14 14 0 0128 0v12"/><circle cx="50" cy="63" r="4"/></svg>',
+bottle:'<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><rect x="32" y="30" width="36" height="56" rx="10"/><path d="M42 30v-8h16v8M32 52h36"/></svg>',
+bell:'<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="5" stroke-linecap="round"><circle cx="50" cy="54" r="28"/><circle cx="50" cy="54" r="8"/><path d="M50 20v6"/></svg>'};
+const P=[
+{id:1,n:'Beacon 600 front light',c:'Lights',p:49,g:'light',col:'#F6C453',d:'USB-C rechargeable, 600 lumens, six modes. Lasts 9 hours on low.'},
+{id:2,n:'Tail 120 rear light',c:'Lights',p:24,g:'light',col:'#FF8A5B',d:'Bright red rear light with a brake-sensing flash. Clips to seatposts and bags.'},
+{id:3,n:'Commuter pannier, 22L',c:'Bags',p:89,g:'bag',col:'#8FB9E0',d:'Waterproof roll-top pannier with a laptop sleeve and reflective trim.'},
+{id:4,n:'Frame bag, slim',c:'Bags',p:42,g:'bag',col:'#A8D5BA',d:'Fits behind the head tube. Holds a tube, tools and your keys.'},
+{id:5,n:'Shell helmet',c:'Safety',p:68,g:'helmet',col:'#C9B6E4',d:'Lightweight, ventilated, with a rear light mount and magnetic buckle.'},
+{id:6,n:'Hi-vis ankle bands (pair)',c:'Safety',p:12,g:'bell',col:'#E8E86B',d:'Reflective bands that keep trousers out of your chain.'},
+{id:7,n:'D-lock, 14mm',c:'Safety',p:59,g:'lock',col:'#F2A0A0',d:'Hardened steel shackle with a frame mount. Rated for city use.'},
+{id:8,n:'Ring bell',c:'Safety',p:11,g:'bell',col:'#9ED8D8',d:'A clear, friendly ring that fits any handlebar from 22 to 31 mm.'},
+{id:9,n:'Steel bottle, 650ml',c:'Care',p:22,g:'bottle',col:'#B7C4D6',d:'Insulated bottle that fits standard cages. Keeps water cold for 12 hours.'},
+{id:10,n:'Chain lube, 120ml',c:'Care',p:14,g:'bottle',col:'#F5C99B',d:'All-weather lube that stays on in the rain and attracts less grit.'},
+{id:11,n:'Mini pump',c:'Care',p:28,g:'bottle',col:'#D6E39A',d:'Pumps to 100 psi. Works with Presta and Schrader valves.'},
+{id:12,n:'Repair kit',c:'Care',p:19,g:'bag',col:'#E6B8D4',d:'Patches, levers, a multi-tool and a spare tube in a small pouch.'}];
+const $=s=>document.querySelector(s),money=n=>'$'+n.toFixed(2).replace('.00','');
+let cart={},cat='All',query='',sort='feat';
+try{cart=JSON.parse(localStorage.getItem('pw-cart')||'{}')}catch(e){}
+const save=()=>{try{localStorage.setItem('pw-cart',JSON.stringify(cart))}catch(e){}};
+const tile=(p,cls='tile')=>`<div class="${cls}" style="background:${p.col}">${G[p.g]}</div>`;
+function chips(){const cs=['All',...new Set(P.map(p=>p.c))];$('#chips').innerHTML=cs.map(c=>`<button class="chip" aria-pressed="${c===cat}" data-c="${c}">${c}</button>`).join('')}
+function grid(){let l=P.filter(p=>(cat==='All'||p.c===cat)&&(p.n+p.c).toLowerCase().includes(query));
+if(sort==='lo')l.sort((a,b)=>a.p-b.p);if(sort==='hi')l.sort((a,b)=>b.p-a.p);if(sort==='az')l.sort((a,b)=>a.n.localeCompare(b.n));
+$('#grid').innerHTML=l.length?l.map(p=>`<article class="card"><button class="tile" data-v="${p.id}" style="background:${p.col}" aria-label="View ${p.n}">${G[p.g]}</button><div class="info"><small>${p.c}</small><h3>${p.n}</h3><div class="row"><span class="price">${money(p.p)}</span><button class="add" data-a="${p.id}">Add to cart</button></div></div></article>`).join(''):'<div class="empty">No products match “'+query.replace(/[<>&]/g,'')+'”. Try another word or clear the filter.</div>'}
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('on');clearTimeout(toast.t);toast.t=setTimeout(()=>t.classList.remove('on'),1800)}
+function add(id){cart[id]=(cart[id]||0)+1;save();render();toast('Added to cart')}
+function render(){const ids=Object.keys(cart).filter(i=>cart[i]>0);let sum=0,n=0;
+$('#items').innerHTML=ids.length?ids.map(i=>{const p=P.find(x=>x.id==i);sum+=p.p*cart[i];n+=cart[i];
+return `<div class="li"><div class="t" style="background:${p.col}">${G[p.g]}</div><div><strong>${p.n}</strong><div class="qty"><button data-m="${i}" aria-label="Remove one">−</button>${cart[i]}<button data-p="${i}" aria-label="Add one">+</button></div></div><div class="price" style="font-size:16px">${money(p.p*cart[i])}</div></div>`}).join(''):'<p style="color:var(--muted);padding:24px 0">Your cart is empty. Add a light or a lock to get started.</p>';
+$('#count').textContent=n;$('#sub').textContent=money(sum);
+const left=75-sum;$('#ship').innerHTML=(left>0?`Add ${money(left)} more for free shipping`:'You’ve got free shipping')+`<div class="meter"><i style="width:${Math.min(100,sum/75*100)}%"></i></div>`;
+$('#buy').disabled=!ids.length}
+function panel(on){$('#cart').classList.toggle('on',on);$('#scrim').classList.toggle('on',on);$('#cart').setAttribute('aria-hidden',!on);if(on)$('#close').focus()}
+function view(id){const p=P.find(x=>x.id==id);$('#box').innerHTML=`${tile(p)}<div class="det"><button class="x" data-x aria-label="Close">×</button><small>${p.c}</small><h2>${p.n}</h2><p>${p.d}</p><div class="price">${money(p.p)}</div><button class="btn" data-a="${p.id}" data-close>Add to cart</button></div>`;$('#modal').classList.add('on')}
+document.addEventListener('click',e=>{const t=e.target;
+if(t.dataset.c){cat=t.dataset.c;chips();grid()}
+if(t.dataset.a){add(+t.dataset.a);if(t.hasAttribute('data-close'))$('#modal').classList.remove('on')}
+if(t.dataset.v)view(t.dataset.v);
+if(t.dataset.p){cart[t.dataset.p]++;save();render()}
+if(t.dataset.m){cart[t.dataset.m]--;save();render()}
+if(t===$('#modal')||t.hasAttribute('data-x'))$('#modal').classList.remove('on');
+if(t===$('#scrim')||t===$('#close'))panel(false);
+if(t.closest('#open'))panel(true);
+if(t===$('#buy')){const n=Object.values(cart).reduce((a,b)=>a+b,0);cart={};save();render();panel(false);toast('Order placed – '+n+' item'+(n>1?'s':'')+' on the way')}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'){panel(false);$('#modal').classList.remove('on')}});
+$('#q').addEventListener('input',e=>{query=e.target.value.toLowerCase().trim();grid()});
+$('#sort').addEventListener('change',e=>{sort=e.target.value;grid()});
+chips();grid();render();
+</script>
+</body>
+</html>
